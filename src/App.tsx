@@ -1,24 +1,16 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import 'antd/dist/antd.css';
+import DropDown from './component/dropDown/dropDown';
+
+const colors = ["Red", "Yellow", "Green", "Blue", "Pink", "Black", "Brown", "Silver", "Grey"];
+const colors2 = [{ title: "Red", id: "red" }, { title: "Yellow", id: "yellow" }, { title: "Green", id: "green" }, { title: "Blue", id: "blue" }, { title: "Pink", id: "pink" }, { title: "Black", id: "black" },]
+
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <DropDown optionsData={colors} />
     </div>
   );
 }
