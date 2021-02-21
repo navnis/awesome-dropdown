@@ -8,15 +8,14 @@ const CheckboxGroup = Checkbox.Group;
 
 
 export type CheckboxValueType = string | number | boolean;
-export type OptionType = string | number | { title: string | number, id: string }
-export type OptionsType = string[]
+export type OptionType = Array<string | number | { title: string | number, id: string }>
 export interface IProps {
-    optionsData: OptionsType
+    optionsData: OptionType
     searchable?: boolean
     multiselect?: boolean
 }
 
-const modifyOptionIds = (options: OptionsType) => {
+const modifyOptionIds = (options: OptionType) => {
     if (typeof options === "object") {
         if (typeof options[0] === "object") {
             return options.map((data: any) => data.id)
@@ -39,6 +38,11 @@ const DropDown: FC<IProps> = ({ optionsData, searchable = true, multiselect = tr
         setIndeterminate(false);
         setCheckAll(checked);
     }, [modifiedOptionIds]);
+
+
+    const onSubmit = useCallback(() => {
+        console.log("values", checkedList)
+    }, [checkedList])
 
 
     const customOption = useCallback((options: any): JSX.Element => {
@@ -65,11 +69,11 @@ const DropDown: FC<IProps> = ({ optionsData, searchable = true, multiselect = tr
                 </div>
                 <div className="bottom_container">
                     <div className="clear_button">Clear</div>
-                    <div className="submit_button">Submit</div>
+                    <div className="submit_button" onClick={onSubmit}>Submit</div>
                 </div>
             </div>
         </div>
-    }, [indeterminate, checkedList, checkAll, onCheckAllChange, multiselect])
+    }, [indeterminate, checkedList, checkAll, onCheckAllChange, multiselect, onSubmit])
 
 
     const onChangeSelect = useCallback((value: any) => {
@@ -94,7 +98,6 @@ const DropDown: FC<IProps> = ({ optionsData, searchable = true, multiselect = tr
                 mode={multiselect ? "multiple" : undefined}
                 size="large"
                 autoFocus
-                open={true}
                 dropdownClassName="select_dropdown"
                 showArrow={true}
                 suffixIcon={<CaretDownOutlined />}
@@ -103,9 +106,20 @@ const DropDown: FC<IProps> = ({ optionsData, searchable = true, multiselect = tr
                 optionLabelProp="name"
                 tagRender={tagRender}
                 showSearch={searchable}
+                maxTagCount={2}
             >
 
-                {optionsData.map((data) => <Option key={data} value={data} name={data}>{multiselect ? <Checkbox value={data} /> : null}{data}</Option>)}
+                {optionsData.map((data) => {
+                    let id, title
+                    if (typeof data === "object") {
+                        id = data.id
+                        title = data.title
+                    } else {
+                        id = data
+                        title = data
+                    }
+                    return <Option key={id} value={id} name={title}>{multiselect ? <Checkbox value={id} /> : null}{title}</Option>
+                })}
 
             </Select>
         </div>
